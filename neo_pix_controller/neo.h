@@ -4,9 +4,9 @@
 #include <Adafruit_NeoPixel.h>
 
 // How many NeoPixels are attached to the Arduino?
-#define LED_COUNT 60
+#define LED_COUNT 10
 
-enum Color {
+enum class Color {
   RED = 0, 
   GREEN = 1, 
   BLUE = 2,
@@ -15,6 +15,10 @@ enum Color {
   NONE = 4
 };
 
+enum class Algo {
+  NONE = 0,
+  SINE = 1
+};
 
 class Neo {
 public:
@@ -22,11 +26,16 @@ public:
   void setup();
   void enqueue_message(char * buff, int size);
   void tick();
+  void math();
 private:
   int control_pin_;
   Adafruit_NeoPixel strip;
   int color_map[LED_COUNT][3];
   int pix_index_;
+  // Algorithm stuff
+  Algo algo_;
+  float frequency_[3];
+  float amplitude_[3];
 };
 
 #endif /* __NEO_H__ */

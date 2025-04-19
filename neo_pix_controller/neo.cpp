@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include <math.h>
+#include <stdint.h>
 #include "neo.h"
 
 void Neo::tick(){
@@ -6,6 +8,25 @@ void Neo::tick(){
     strip.setPixelColor(i, color_map[i][0], color_map[i][1], color_map[i][2]);
   }
   strip.show();
+}
+
+void Neo::math(){
+  static uint32_t tick_c = 0;
+  tick_c++;
+  switch(algo_){
+    case Algo::SINE:
+      for (int i = 0; i < LED_COUNT; i++){
+        for (int j = 0; j < 3; j++){
+          color_map[i][j] = (int) (amplitude_[j] * (1 + sin(2 * M_PI * tick_c * frequency_[j]))/2.0);
+          if (tick_c % 10 == 0){
+            Serial.print(color_map[i][j]);
+            Serial.print("\t");
+          }
+        }
+        if (tick_c % 10 == 0) Serial.print("\r\n");
+      }
+      break;
+  }
 }
 
 void Neo::setup(){
@@ -20,22 +41,60 @@ void Neo::setup(){
 void Neo::enqueue_message(char * buff, int size){
   if (size <= 0) return;
   char egg[100];
-  int val = atoi(buff+1);
-  Color color = NONE;
+  int val;
+  Color color = Color::NONE;
   switch(buff[0]){
     case 'q':
       memset(color_map, 0, sizeof(color_map));
+    case 'x':
+      switch (buff[1]){
+        case 's':
+          algo_ = Algo::SINE;
+          break;
+      }
+      break;
+    case 'a':
+    case 'f':
+      float vals = atof(buff+2);
+      int ind = 3;
+      switch(buff[1]){
+        case 'r':
+          ind = 0;
+          break;
+        case 'g':
+          ind = 1;
+          break;
+        case 'b':
+          ind = 2;  
+          break; 
+      }
+      if (ind != 3){
+        char fs[10];
+        dtostrf(vals, 4, 2, fs);
+        sprintf(egg, "Writing value %c, %c to %s",buff[0], buff[1], fs);
+        Serial.println(egg);
+        if (buff[0] == 'f'){
+          frequency_[ind] = vals;
+        } else if (buff[0] == 'a'){
+          amplitude_[ind] = vals;
+        }
+      }
+    // write raw pix and color
     case 'r':
-      color = RED;
+      val = atoi(buff+1);
+      color = Color::RED;
       break;
     case 'g':
-      color = GREEN;
+      val = atoi(buff+1);
+      color = Color::GREEN;
       break;
     case 'b':
-      color = BLUE;
+      val = atoi(buff+1);
+      color = Color::BLUE;
       break;
     case 'p':
-      color = PIXEL; 
+      val = atoi(buff+1);
+      color = Color::PIXEL; 
       if (val >= LED_COUNT){
         Serial.println("INDEXED OUT OF BOUND PIXEL");
         return;
@@ -46,10 +105,10 @@ void Neo::enqueue_message(char * buff, int size){
       return;
   }
 
-  if (color != PIXEL){
+  if (color != Color::PIXEL && color != Color::NONE){
     sprintf(egg, "Setting %c to value: %d at pixel index %d", buff[0], val, pix_index_);
-    color_map[pix_index_][color] = val;
-  } else if (color == PIXEL){
+    color_map[pix_index_][(int)color] = val;
+  } else if (color == Color::PIXEL){
     sprintf(egg, "Updating pix_index to: %d", pix_index_);
   }
   Serial.println(egg);
