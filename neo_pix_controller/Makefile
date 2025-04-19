@@ -5,4 +5,4 @@ compile:
 
 deploy:
 	# can parse `arduino-cli board list` with awk if needed 
-	arduino-cli upload --input-file bin/neo_pix.ino.with_bootloader.bin --fqbn arduino:avr:uno -p /dev/ttyACM0 --verbose
+	arduino-cli upload --input-file bin/neo_pix_controller.ino.with_bootloader.bin --fqbn arduino:avr:uno -p /dev/ttyACM1 --verbose

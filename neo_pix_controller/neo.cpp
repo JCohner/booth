@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "neo.h"
 
 void Neo::setup(){
@@ -9,5 +10,13 @@ void Neo::setup(){
 }
 
 void Neo::enqueue_message(char * buff, int size){
+  if (size <= 0) return;
+  switch(buff[0]){
+    case 'r':
+      char egg[100];
+      sprintf(egg, "got red of val: %d", atoi(buff+1));
+      Serial.println(egg);
+      break;
+  }
 
 }
