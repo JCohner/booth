@@ -9,7 +9,10 @@
 enum Color {
   RED = 0, 
   GREEN = 1, 
-  BLUE = 2
+  BLUE = 2,
+  // Below are state machine hackery
+  PIXEL = 3, 
+  NONE = 4
 };
 
 
@@ -18,10 +21,12 @@ public:
   Neo(int control_pin=6) : control_pin_(control_pin) {};
   void setup();
   void enqueue_message(char * buff, int size);
+  void tick();
 private:
   int control_pin_;
   Adafruit_NeoPixel strip;
-  int color_map[3][LED_COUNT];
+  int color_map[LED_COUNT][3];
+  int pix_index_;
 };
 
 #endif /* __NEO_H__ */
