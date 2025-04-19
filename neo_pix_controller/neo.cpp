@@ -17,13 +17,13 @@ void Neo::math(){
     case Algo::SINE:
       for (int i = 0; i < LED_COUNT; i++){
         for (int j = 0; j < 3; j++){
-          color_map[i][j] = (int) (amplitude_[j] * (1 + sin(2 * M_PI * tick_c * frequency_[j]))/2.0);
-          if (tick_c % 10 == 0){
-            Serial.print(color_map[i][j]);
-            Serial.print("\t");
-          }
+          color_map[i][j] = (int) (amplitude_[j] * (1 + sin(2 * M_PI * (tick_c + offset_[i] *frequency_[j]) * frequency_[j]))/2.0);
+          // if (tick_c % 100 == 0){
+          //   Serial.print(color_map[i][j]);
+          //   Serial.print("\t");
+          // }
         }
-        if (tick_c % 10 == 0) Serial.print("\r\n");
+        // if (tick_c % 100 == 0) Serial.print("\r\n");
       }
       break;
   }
@@ -42,10 +42,15 @@ void Neo::enqueue_message(char * buff, int size){
   if (size <= 0) return;
   char egg[100];
   int val;
+  float valf;
+  int ind = 3;
   Color color = Color::NONE;
+  Serial.print("swithcing on: ");
+  Serial.println(buff[0]);
   switch(buff[0]){
     case 'q':
       memset(color_map, 0, sizeof(color_map));
+      break;
     case 'x':
       switch (buff[1]){
         case 's':
@@ -55,8 +60,7 @@ void Neo::enqueue_message(char * buff, int size){
       break;
     case 'a':
     case 'f':
-      float vals = atof(buff+2);
-      int ind = 3;
+      valf = atof(buff+2);
       switch(buff[1]){
         case 'r':
           ind = 0;
@@ -70,15 +74,16 @@ void Neo::enqueue_message(char * buff, int size){
       }
       if (ind != 3){
         char fs[10];
-        dtostrf(vals, 4, 2, fs);
+        dtostrf(valf, 4, 2, fs);
         sprintf(egg, "Writing value %c, %c to %s",buff[0], buff[1], fs);
         Serial.println(egg);
         if (buff[0] == 'f'){
-          frequency_[ind] = vals;
+          frequency_[ind] = valf;
         } else if (buff[0] == 'a'){
-          amplitude_[ind] = vals;
+          amplitude_[ind] = valf;
         }
       }
+      break;
     // write raw pix and color
     case 'r':
       val = atoi(buff+1);
@@ -92,17 +97,19 @@ void Neo::enqueue_message(char * buff, int size){
       val = atoi(buff+1);
       color = Color::BLUE;
       break;
+    case 'o':
+      val = atof(buff+1);
+      offset_[pix_index_] = val;
+      break;
     case 'p':
       val = atoi(buff+1);
-      color = Color::PIXEL; 
+      color = Color::PIXEL;
       if (val >= LED_COUNT){
         Serial.println("INDEXED OUT OF BOUND PIXEL");
         return;
       }
       pix_index_ = val;
       break;
-    default:
-      return;
   }
 
   if (color != Color::PIXEL && color != Color::NONE){
