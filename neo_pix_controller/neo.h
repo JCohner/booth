@@ -1,10 +1,11 @@
 #ifndef __NEO_H__
 #define __NEO_H__
 
-#include <Adafruit_NeoPixel.h>
+#include <FastLED.h>
 
 // How many NeoPixels are attached to the Arduino?
-#define LED_COUNT 16
+#define LED_COUNT 60
+#define CONTROL_PIN 6
 
 enum class Color {
   RED = 0, 
@@ -28,8 +29,9 @@ public:
   void tick();
   void math();
 private:
+  CRGB leds_[LED_COUNT];
   int control_pin_;
-  Adafruit_NeoPixel strip;
+
   int color_map[LED_COUNT][3];
   int pix_index_;
   // Algorithm stuff

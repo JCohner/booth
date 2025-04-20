@@ -3,11 +3,13 @@
 #include <stdint.h>
 #include "neo.h"
 
+
 void Neo::tick(){
   for (int i = 0; i < LED_COUNT; i++){
-    strip.setPixelColor(i, color_map[i][0], color_map[i][1], color_map[i][2]);
+    leds_[i] = CRGB((i+255) % 255 , 0, 0);
   }
-  strip.show();
+  // blur1d(leds_, 20, 172);
+  FastLED.show();
 }
 
 void Neo::math(){
@@ -16,13 +18,15 @@ void Neo::math(){
   switch(algo_){
     case Algo::SINE:
       for (int i = 0; i < LED_COUNT; i++){
-        for (int j = 0; j < 3; j++){
-          color_map[i][j] = (int) (amplitude_[j] * (1 + sin(2 * M_PI * (tick_c + offset_[i] *frequency_[j]) * frequency_[j]))/2.0);
+        // for (int j = 0; j < 3; j++){
+          // leds_[i] = CRGB(200, 200, 0);
+          
+          // leds_[i] = (int) (amplitude_[j] * (1 + sin(2 * M_PI * (tick_c + offset_[i]) * frequency_[j]))/2.0);
           // if (tick_c % 100 == 0){
           //   Serial.print(color_map[i][j]);
           //   Serial.print("\t");
           // }
-        }
+        // }
         // if (tick_c % 100 == 0) Serial.print("\r\n");
       }
       break;
@@ -30,11 +34,8 @@ void Neo::math(){
 }
 
 void Neo::setup(){
-  // Declare our NeoPixel strip object:
-  strip = Adafruit_NeoPixel(LED_COUNT, control_pin_, NEO_GRB + NEO_KHZ800);
-  Serial.begin(9600);
-  strip.begin();
-  strip.show(); // Initialize all pixels to 'off'
+  FastLED.addLeds<NEOPIXEL, CONTROL_PIN>(leds_, LED_COUNT).setCorrection( TypicalLEDStrip );;  // GRB ordering is assumed
+  FastLED.setBrightness( 255 );
   pix_index_ = 0;
 }
 
@@ -83,32 +84,6 @@ void Neo::enqueue_message(char * buff, int size){
           amplitude_[ind] = valf;
         }
       }
-      break;
-    // write raw pix and color
-    case 'r':
-      val = atoi(buff+1);
-      color = Color::RED;
-      break;
-    case 'g':
-      val = atoi(buff+1);
-      color = Color::GREEN;
-      break;
-    case 'b':
-      val = atoi(buff+1);
-      color = Color::BLUE;
-      break;
-    case 'o':
-      val = atof(buff+1);
-      offset_[pix_index_] = val;
-      break;
-    case 'p':
-      val = atoi(buff+1);
-      color = Color::PIXEL;
-      if (val >= LED_COUNT){
-        Serial.println("INDEXED OUT OF BOUND PIXEL");
-        return;
-      }
-      pix_index_ = val;
       break;
   }
 
