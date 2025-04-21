@@ -7,6 +7,7 @@
 // How many NeoPixels are attached to the Arduino?
 #define LED_COUNT 60
 #define CONTROL_PIN 6
+#define NUM_RECTANGLES 5
 
 class Controller {
 public:
@@ -18,7 +19,7 @@ private:
   CRGB leds_[LED_COUNT];
   int control_pin_;
 
-  Rectangle rects_[4];
+  Rectangle rects_[NUM_RECTANGLES];
 };
 
 #endif /* __CONTROLLER_H__ */

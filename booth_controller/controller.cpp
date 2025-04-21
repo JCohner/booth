@@ -9,7 +9,7 @@ void Controller::tick(){
   static uint8_t rval, bval, gval;
   static uint32_t tick = 0;
   tick++;
-  for (int i =0; i < 4; i++){
+  for (int i =0; i < NUM_RECTANGLES; i++){
     Rectangle rect = rects_[i]; 
     rect.update(tick);
   }
@@ -31,7 +31,7 @@ void Controller::setup(){
   Serial.print("leds is at: ");
   Serial.println((int)leds_);
 
-  for (int i = 0; i < 4; i++){
+  for (int i = 0; i < NUM_RECTANGLES; i++){
     Serial.print("Assigning ");
     Serial.println((int)(leds_ + gen_off));
     rects_[i].leds_ = leds_ + gen_off;
