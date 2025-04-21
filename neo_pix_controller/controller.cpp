@@ -54,6 +54,7 @@ void Controller::enqueue_message(char * buff, int size){
       //memset(color_map, 0, sizeof(color_map));
       break;
     case 'a':
+    case 'o':
     case 'f':
       valf = atof(buff+3);
       Serial.println(buff[1]);
@@ -66,7 +67,7 @@ void Controller::enqueue_message(char * buff, int size){
           ind = 1;
           break;
         case 'b':
-          ind = 2;  
+          ind = 2;
           break; 
       }
       if (ind != 3){
@@ -78,6 +79,8 @@ void Controller::enqueue_message(char * buff, int size){
           rects_[rect].set_frequency(ind, valf);
         } else if (buff[0] == 'a'){
           rects_[rect].set_amplitude(ind, valf);
+        } else if (buff[0] == 'o'){
+          rects_[rect].set_offset(ind, valf);
         }
       }
       break;

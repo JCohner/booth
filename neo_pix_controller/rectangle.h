@@ -20,6 +20,7 @@ public:
   void update(uint32_t tick);
   void set_amplitude(int idx, float value) {amplitude_[idx] = value;}
   void set_frequency(int idx, float value) {frequency_[idx] = value;}
+  void set_offset(int idx, float value) {offset_[idx] = value;}
   CRGB* leds_;
 private:
   int global_start_;
@@ -27,6 +28,7 @@ private:
   int count_;
   float amplitude_[3];
   float frequency_[3];
+  float offset_[3];
 };
 
 #endif /* __RECTANGLE_H__ */
