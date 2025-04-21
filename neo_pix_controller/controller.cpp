@@ -10,7 +10,7 @@ void Controller::tick(){
   static uint32_t tick = 0;
   tick++;
   for (int i =0; i < 4; i++){
-    Rectangle rect = rects_[i];
+    Rectangle rect = rects_[i]; 
     rect.update(tick);
   }
   FastLED.show();
