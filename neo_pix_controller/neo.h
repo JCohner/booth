@@ -33,7 +33,7 @@ private:
   CRGB leds_[LED_COUNT];
   int control_pin_;
 
-  Rectangle rects_[10];
+  Rectangle rects_[4];
 };
 
 #endif /* __NEO_H__ */

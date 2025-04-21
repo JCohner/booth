@@ -16,7 +16,7 @@ public:
   void update(uint32_t tick);
   void set_amplitude(int idx, float value) {amplitude_[idx] = value;}
   void set_frequency(int idx, float value) {frequency_[idx] = value;}
-  CRGB* leds_;
+  CRGB leds_[30];
 private:
   int global_start_;
   int global_stop_;

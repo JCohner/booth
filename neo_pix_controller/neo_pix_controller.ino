@@ -12,7 +12,7 @@ ISR(TIMER2_COMPA_vect)
 
 ISR(TIMER1_COMPA_vect)
 {
-  OCR1A += 25000; // Advance The COMPA Register
+  OCR1A += 60000; // Advance The COMPA Register
   //neo.math();
   neo.tick();
   // Handle The Timer Interrupt
@@ -34,10 +34,11 @@ void setup() {
   OCR2A = 156;        // Timer Compare2A Register
   TIMSK2 |= B00000010;  // Enable Timer COMPA Interrupt */
 
+  // 30 ms timer
   TCCR1A = 0;           // Init Timer1A
   TCCR1B = 0;           // Init Timer1B
-  TCCR1B |= B00000011;  // Prescaler = 64
-  OCR1A = 25000;        // Timer Compare1A Register
+  TCCR1B |= B00000010;  // Prescaler = 8
+  OCR1A = 60000;        // Timer Compare1A Register
   //TIMSK1 |= B00000010;  // Enable Timer COMPA Interrupt
 }
 
