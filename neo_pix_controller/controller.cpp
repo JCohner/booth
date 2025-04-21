@@ -2,10 +2,10 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "neo.h"
+#include "controller.h"
 
 
-void Neo::tick(){
+void Controller::tick(){
   static uint8_t rval, bval, gval;
   static uint32_t tick = 0;
   tick++;
@@ -16,7 +16,7 @@ void Neo::tick(){
   FastLED.show();
 }
 
-void Neo::setup(){
+void Controller::setup(){
   FastLED.addLeds<NEOPIXEL, CONTROL_PIN>(leds_, LED_COUNT).setCorrection( TypicalLEDStrip );;  // GRB ordering is assumed
   FastLED.setBrightness( 255 );
 
@@ -39,14 +39,13 @@ void Neo::setup(){
   }
 }
 
-void Neo::enqueue_message(char * buff, int size){
+void Controller::enqueue_message(char * buff, int size){
   if (size <= 0) return;
   char egg[100];
   int val;
   int rect;
   float valf;
   int ind = 3;
-  Color color = Color::NONE;
   Serial.print("swithcing on: ");
   Serial.println(buff[0]);
   switch(buff[0]){

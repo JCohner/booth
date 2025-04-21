@@ -1,10 +1,11 @@
-#include "neo.h"
-Neo neo(6);
+#include "controller.h"
+
+Controller controller(6);
 
 ISR(TIMER1_COMPA_vect)
 {
   OCR1A += 60000; // Advance The COMPA Register
-  neo.tick();
+  controller.tick();
 }
 
 
@@ -12,7 +13,7 @@ void setup() {
   pinMode(A0, INPUT);
   Serial.begin(9600);
   while(!Serial){;}
-  neo.setup();
+  controller.setup();
 
   // Thanks to this lovely little calculator: https://deepbluembedded.com/arduino-timer-calculator-code-generator/
   // 30 ms timer
@@ -39,7 +40,7 @@ void loop() {
     if (incoming_byte == termination_char){
       Serial.print("Read string: ");
       Serial.println(buff);
-      neo.enqueue_message(buff, ii);
+      controller.enqueue_message(buff, ii);
       memset(buff, 0, 100*sizeof(char));
       ii =0;
     }
