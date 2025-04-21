@@ -1,31 +1,40 @@
 #include <Arduino.h>
 #include <math.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include "neo.h"
 
 
 void Neo::tick(){
-  FastLED.show();
-}
-
-void Neo::math(){
-  static unsigned int tick = 0;
   static uint8_t rval, bval, gval;
+  static uint32_t tick = 0;
   tick++;
-  for (int i = 0; i < LED_COUNT; i++){
-    rval = amplitude_[0] * (1 + sin(2 * M_PI * tick * frequency_[0]));
-    bval = amplitude_[1] * (1 + sin(2 * M_PI * tick * frequency_[1]));
-    gval = amplitude_[2] * (1 + sin(2 * M_PI * tick * frequency_[2]));
-    leds_[i] = CRGB(rval, bval, gval);
+  for (int i =0; i < 5; i++){
+    auto rect = rects_[i];
+    rect.update(tick);
+    int z = 0;
+    for (int j = rect.start; j < rect.end; j++){
+      leds_[j] = rect.leds_[z++];
+    }
   }
-  if (tick % 10 == 0)
-    Serial.println(gval);
+  FastLED.show();
 }
 
 void Neo::setup(){
   FastLED.addLeds<NEOPIXEL, CONTROL_PIN>(leds_, LED_COUNT).setCorrection( TypicalLEDStrip );;  // GRB ordering is assumed
   FastLED.setBrightness( 255 );
   pix_index_ = 0;
+
+  // setup rectangles
+  rects_[0] = Rectangle(0, 5);
+  rects_[1] = Rectangle(5, 10);
+  rects_[2] = Rectangle(15, 20);
+  rects_[3] = Rectangle(35, 10);
+  rects_[4] = Rectangle(45, 15);
+
+  for (int i = 0; i < 4; i++){
+    rects_[i].leds_ = malloc(rects_[i].count() * sizeof(CRGB));
+  }
 }
 
 void Neo::enqueue_message(char * buff, int size){
@@ -75,13 +84,4 @@ void Neo::enqueue_message(char * buff, int size){
       }
       break;
   }
-
-  if (color != Color::PIXEL && color != Color::NONE){
-    sprintf(egg, "Setting %c to value: %d at pixel index %d", buff[0], val, pix_index_);
-    color_map[pix_index_][(int)color] = val;
-  } else if (color == Color::PIXEL){
-    sprintf(egg, "Updating pix_index to: %d", pix_index_);
-  }
-  Serial.println(egg);
-
 }

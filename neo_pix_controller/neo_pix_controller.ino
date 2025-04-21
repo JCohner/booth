@@ -13,7 +13,7 @@ ISR(TIMER2_COMPA_vect)
 ISR(TIMER1_COMPA_vect)
 {
   OCR1A += 25000; // Advance The COMPA Register
-  neo.math();
+  //neo.math();
   neo.tick();
   // Handle The Timer Interrupt
   //...

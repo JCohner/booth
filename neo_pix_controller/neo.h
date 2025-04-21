@@ -3,6 +3,8 @@
 
 #include <FastLED.h>
 
+#include "rectangle.h"
+
 // How many NeoPixels are attached to the Arduino?
 #define LED_COUNT 60
 #define CONTROL_PIN 6
@@ -27,18 +29,11 @@ public:
   void setup();
   void enqueue_message(char * buff, int size);
   void tick();
-  void math();
 private:
   CRGB leds_[LED_COUNT];
   int control_pin_;
 
-  int color_map[LED_COUNT][3];
-  int pix_index_;
-  // Algorithm stuff
-  Algo algo_;
-  float frequency_[3];
-  float amplitude_[3];
-  float offset_[LED_COUNT];
+  Rectangle rects_[10];
 };
 
 #endif /* __NEO_H__ */
