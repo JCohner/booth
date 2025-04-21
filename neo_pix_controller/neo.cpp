@@ -5,32 +5,21 @@
 
 
 void Neo::tick(){
-  for (int i = 0; i < LED_COUNT; i++){
-    leds_[i] = CRGB((i+255) % 255 , 0, 0);
-  }
-  // blur1d(leds_, 20, 172);
   FastLED.show();
 }
 
 void Neo::math(){
-  static uint32_t tick_c = 0;
-  tick_c++;
-  switch(algo_){
-    case Algo::SINE:
-      for (int i = 0; i < LED_COUNT; i++){
-        // for (int j = 0; j < 3; j++){
-          // leds_[i] = CRGB(200, 200, 0);
-          
-          // leds_[i] = (int) (amplitude_[j] * (1 + sin(2 * M_PI * (tick_c + offset_[i]) * frequency_[j]))/2.0);
-          // if (tick_c % 100 == 0){
-          //   Serial.print(color_map[i][j]);
-          //   Serial.print("\t");
-          // }
-        // }
-        // if (tick_c % 100 == 0) Serial.print("\r\n");
-      }
-      break;
+  static unsigned int tick = 0;
+  static uint8_t rval, bval, gval;
+  tick++;
+  for (int i = 0; i < LED_COUNT; i++){
+    rval = amplitude_[0] * (1 + sin(2 * M_PI * tick * frequency_[0]));
+    bval = amplitude_[1] * (1 + sin(2 * M_PI * tick * frequency_[1]));
+    gval = amplitude_[2] * (1 + sin(2 * M_PI * tick * frequency_[2]));
+    leds_[i] = CRGB(rval, bval, gval);
   }
+  if (tick % 10 == 0)
+    Serial.println(gval);
 }
 
 void Neo::setup(){

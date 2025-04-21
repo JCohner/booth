@@ -6,9 +6,19 @@ ISR(TIMER2_COMPA_vect)
   OCR2A += 156;// Timer Preloading
   // Handle The 10ms Timer Interrupt
   // This triggers the tick function of the robot to check state
-  neo.tick();
+  neo.math();
   //neo.math();
 }
+
+ISR(TIMER1_COMPA_vect)
+{
+  OCR1A += 25000; // Advance The COMPA Register
+  neo.math();
+  neo.tick();
+  // Handle The Timer Interrupt
+  //...
+}
+
 
 void setup() {
   pinMode(A0, INPUT);
@@ -16,11 +26,18 @@ void setup() {
   neo.setup();
 
   // Thanks to this lovely little calculator: https://deepbluembedded.com/arduino-timer-calculator-code-generator/
+  /*
   TCCR2A = 0;           // Init Timer2A
   TCCR2B = 0;           // Init Timer2B
   TCCR2B |= B00000111;  // Prescaler = 1024
   OCR2A = 156;        // Timer Compare2A Register
-  TIMSK2 |= B00000010;  // Enable Timer COMPA Interrupt
+  TIMSK2 |= B00000010;  // Enable Timer COMPA Interrupt */
+
+  TCCR1A = 0;           // Init Timer1A
+  TCCR1B = 0;           // Init Timer1B
+  TCCR1B |= B00000011;  // Prescaler = 64
+  OCR1A = 25000;        // Timer Compare1A Register
+  TIMSK1 |= B00000010;  // Enable Timer COMPA Interrupt
 }
 
 char buff[100] = {0};
