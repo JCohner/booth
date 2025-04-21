@@ -6,7 +6,7 @@ ISR(TIMER2_COMPA_vect)
   OCR2A += 156;// Timer Preloading
   // Handle The 10ms Timer Interrupt
   // This triggers the tick function of the robot to check state
-  neo.math();
+  //neo.math();
   //neo.math();
 }
 

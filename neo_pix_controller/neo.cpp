@@ -13,7 +13,7 @@ void Neo::tick(){
     auto rect = rects_[i];
     rect.update(tick);
     int z = 0;
-    for (int j = rect.start; j < rect.end; j++){
+    for (int j = rect.global_start(); j < rect.global_stop(); j++){
       leds_[j] = rect.leds_[z++];
     }
   }
@@ -23,7 +23,6 @@ void Neo::tick(){
 void Neo::setup(){
   FastLED.addLeds<NEOPIXEL, CONTROL_PIN>(leds_, LED_COUNT).setCorrection( TypicalLEDStrip );;  // GRB ordering is assumed
   FastLED.setBrightness( 255 );
-  pix_index_ = 0;
 
   // setup rectangles
   rects_[0] = Rectangle(0, 5);
@@ -41,6 +40,7 @@ void Neo::enqueue_message(char * buff, int size){
   if (size <= 0) return;
   char egg[100];
   int val;
+  int rect;
   float valf;
   int ind = 3;
   Color color = Color::NONE;
@@ -48,19 +48,13 @@ void Neo::enqueue_message(char * buff, int size){
   Serial.println(buff[0]);
   switch(buff[0]){
     case 'q':
-      memset(color_map, 0, sizeof(color_map));
-      break;
-    case 'x':
-      switch (buff[1]){
-        case 's':
-          algo_ = Algo::SINE;
-          break;
-      }
+      //memset(color_map, 0, sizeof(color_map));
       break;
     case 'a':
     case 'f':
-      valf = atof(buff+2);
-      switch(buff[1]){
+      valf = atof(buff+3);
+      rect = atoi(buff[1]);
+      switch(buff[2]){
         case 'r':
           ind = 0;
           break;
@@ -74,12 +68,12 @@ void Neo::enqueue_message(char * buff, int size){
       if (ind != 3){
         char fs[10];
         dtostrf(valf, 4, 2, fs);
-        sprintf(egg, "Writing value %c, %c to %s",buff[0], buff[1], fs);
+        sprintf(egg, "For rect %d Writing value %c, %c to %s",rect, buff[0], buff[2], fs);
         Serial.println(egg);
         if (buff[0] == 'f'){
-          frequency_[ind] = valf;
+          rects_[rect].set_frequency(ind, valf);
         } else if (buff[0] == 'a'){
-          amplitude_[ind] = valf;
+          rects_[rect].set_amplitude(ind, valf);
         }
       }
       break;
