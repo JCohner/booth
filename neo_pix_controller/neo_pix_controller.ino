@@ -23,6 +23,7 @@ ISR(TIMER1_COMPA_vect)
 void setup() {
   pinMode(A0, INPUT);
   Serial.begin(9600);
+  while(!Serial){;}
   neo.setup();
 
   // Thanks to this lovely little calculator: https://deepbluembedded.com/arduino-timer-calculator-code-generator/
@@ -37,7 +38,7 @@ void setup() {
   TCCR1B = 0;           // Init Timer1B
   TCCR1B |= B00000011;  // Prescaler = 64
   OCR1A = 25000;        // Timer Compare1A Register
-  TIMSK1 |= B00000010;  // Enable Timer COMPA Interrupt
+  //TIMSK1 |= B00000010;  // Enable Timer COMPA Interrupt
 }
 
 char buff[100] = {0};

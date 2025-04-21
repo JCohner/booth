@@ -10,11 +10,13 @@ void Neo::tick(){
   static uint32_t tick = 0;
   tick++;
   for (int i =0; i < 5; i++){
-    auto rect = rects_[i];
+    Rectangle rect = rects_[i];
     rect.update(tick);
     int z = 0;
     for (int j = rect.global_start(); j < rect.global_stop(); j++){
       leds_[j] = rect.leds_[z++];
+      Serial.print("here: ");
+      Serial.println((int) rect.leds_);
     }
   }
   FastLED.show();
@@ -31,8 +33,11 @@ void Neo::setup(){
   rects_[3] = Rectangle(35, 10);
   rects_[4] = Rectangle(45, 15);
 
+  char buff[100];
   for (int i = 0; i < 4; i++){
-    rects_[i].leds_ = malloc(rects_[i].count() * sizeof(CRGB));
+    rects_[i].leds_ = calloc(rects_[i].count(), sizeof(CRGB));
+    sprintf(buff, "Rect %d allocated %d entries of size %d at location %d",i, rects_[i].count(), sizeof(CRGB), rects_[i].leds_ );
+    Serial.println(buff);
   }
 }
 
@@ -48,6 +53,7 @@ void Neo::enqueue_message(char * buff, int size){
   Serial.println(buff[0]);
   switch(buff[0]){
     case 'q':
+      TIMSK1 |= B00000010;  // Enable Timer COMPA Interrupt
       //memset(color_map, 0, sizeof(color_map));
       break;
     case 'a':
