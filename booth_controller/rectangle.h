@@ -4,16 +4,10 @@
 #include <stdint.h>
 #include <FastLED.h>
 
-#include <Arduino.h>
-
 class Rectangle {
 public:
   Rectangle() {}
-  Rectangle(int start, int count): global_start_(start), 
-                                   global_stop_(start + count),
-                                   count_(count) {
-                                      Serial.println(count_);
-                                   }
+  Rectangle(int start, int count);
   int count(){return count_;}
   int global_start() {return global_start_;}
   int global_stop() {return global_stop_;}
@@ -23,6 +17,7 @@ public:
   void set_offset(int idx, float value) {offset_[idx] = value;}
   CRGB* leds_;
 private:
+  static uint16_t id_;
   int global_start_;
   int global_stop_;
   int count_;

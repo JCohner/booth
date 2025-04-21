@@ -25,7 +25,7 @@ void Controller::setup(){
   rects_[1] = Rectangle(5, 10);
   rects_[2] = Rectangle(15, 20);
   rects_[3] = Rectangle(35, 10);
-  rects_[4] = Rectangle(45, 14);
+  rects_[4] = Rectangle(45, 15);
 
   int gen_off = 0;
   Serial.print("leds is at: ");

@@ -2,6 +2,16 @@
 #include "rectangle.h"
 #include <Arduino.h> //debug
 
+uint16_t Rectangle::id_ = 0;
+
+Rectangle::Rectangle(int start, int count){
+  global_start_ = start;
+  count_ = count;
+  global_stop_ = global_start_ + count_;
+  Serial.println(id_);
+  id_++;
+} 
+
 void Rectangle::update(uint32_t tick){
   static uint8_t rval, bval, gval;
   static float j[3] = {0};
