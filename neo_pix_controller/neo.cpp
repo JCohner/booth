@@ -9,15 +9,9 @@ void Neo::tick(){
   static uint8_t rval, bval, gval;
   static uint32_t tick = 0;
   tick++;
-  for (int i =0; i < 5; i++){
+  for (int i =0; i < 4; i++){
     Rectangle rect = rects_[i];
     rect.update(tick);
-    int z = 0;
-    for (int j = rect.global_start(); j < rect.global_stop(); j++){
-      leds_[j] = rect.leds_[z++];
-      // Serial.print("here: ");
-      // Serial.println((int) rect.leds_);
-    }
   }
   FastLED.show();
 }
@@ -31,14 +25,18 @@ void Neo::setup(){
   rects_[1] = Rectangle(5, 10);
   rects_[2] = Rectangle(15, 20);
   rects_[3] = Rectangle(35, 10);
-  rects_[4] = Rectangle(45, 15);
+  rects_[4] = Rectangle(45, 14);
 
-  // char buff[100];
-  // for (int i = 0; i < 4; i++){
-  //   rects_[i].leds_ = calloc(rects_[i].count(), sizeof(CRGB));
-  //   sprintf(buff, "Rect %d allocated %d entries of size %d at location %d",i, rects_[i].count(), sizeof(CRGB), rects_[i].leds_ );
-  //   Serial.println(buff);
-  // }
+  int gen_off = 0;
+  Serial.print("leds is at: ");
+  Serial.println((int)leds_);
+
+  for (int i = 0; i < 4; i++){
+    Serial.print("Assigning ");
+    Serial.println((int)(leds_ + gen_off));
+    rects_[i].leds_ = leds_ + gen_off;
+    gen_off += rects_[i].count();
+  }
 }
 
 void Neo::enqueue_message(char * buff, int size){
