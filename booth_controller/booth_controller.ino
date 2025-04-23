@@ -4,8 +4,19 @@ Controller controller(6);
 
 ISR(TIMER1_COMPA_vect)
 {
+  static float avg = 30000;
+  static uint16_t num_samples = 1;
+  unsigned long start = micros();
+
   OCR1A += 60000; // Advance The COMPA Register
   controller.tick();
+  avg += (1.0 / ((float) num_samples++)) * ((micros() - start) - avg);
+  if (num_samples % 100 == 0){
+    Serial.print("Loop period: ");
+    Serial.println(avg);
+    avg = 30000;
+    num_samples = 1;
+  }
 }
 
 
