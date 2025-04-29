@@ -2,6 +2,8 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <avr/dtostrf.h>
+#include <fast_samd21_tc5.h>
 #include "controller.h"
 
 
@@ -17,7 +19,7 @@ void Controller::tick(){
 }
 
 void Controller::setup(){
-  FastLED.addLeds<NEOPIXEL, CONTROL_PIN>(leds_, LED_COUNT).setCorrection( TypicalLEDStrip );;  // GRB ordering is assumed
+  FastLED.addLeds<NEOPIXEL, CONTROL_PIN>(leds_, LED_COUNT).setCorrection(TypicalLEDStrip);;  // GRB ordering is assumed
   FastLED.setBrightness( 255 );
 
   // setup rectangles
@@ -50,7 +52,7 @@ void Controller::enqueue_message(char * buff, int size){
   Serial.println(buff[0]);
   switch(buff[0]){
     case 'q':
-      TIMSK1 |= B00000010;  // Enable Timer COMPA Interrupt
+      fast_samd21_tc5_configure(30000); // starts the timer/trigger with 30ms
       //memset(color_map, 0, sizeof(color_map));
       break;
     case 'a':
@@ -72,9 +74,10 @@ void Controller::enqueue_message(char * buff, int size){
       }
       if (ind != 3){
         char fs[10];
-        dtostrf(valf, 4, 2, fs);
-        sprintf(egg, "For rect %d Writing value %c, %c to %s",rect, buff[0], buff[2], fs);
-        Serial.println(egg);
+        // dtostrf(valf, 4, 2, fs);
+        sprintf(egg, "For rect %d Writing value %c, %c to ",rect, buff[0], buff[2]);
+        Serial.print(egg);
+        Serial.println(valf);
         if (buff[0] == 'f'){
           rects_[rect].set_frequency(ind, valf);
         } else if (buff[0] == 'a'){

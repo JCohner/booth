@@ -2,6 +2,7 @@
 
 Controller controller(6);
 
+/*
 ISR(TIMER1_COMPA_vect)
 {
   static float avg = 30000;
@@ -17,6 +18,12 @@ ISR(TIMER1_COMPA_vect)
     avg = 30000;
     num_samples = 1;
   }
+}*/
+
+
+void TC5_Handler(void) {
+  controller.tick();
+  TC5->COUNT16.INTFLAG.bit.MC0 = 1; // clears the interrupt
 }
 
 
@@ -25,14 +32,6 @@ void setup() {
   Serial.begin(9600);
   while(!Serial){;}
   controller.setup();
-
-  // Thanks to this lovely little calculator: https://deepbluembedded.com/arduino-timer-calculator-code-generator/
-  // 30 ms timer
-  TCCR1A = 0;           // Init Timer1A
-  TCCR1B = 0;           // Init Timer1B
-  TCCR1B |= B00000010;  // Prescaler = 8
-  OCR1A = 60000;        // Timer Compare1A Register
-  //TIMSK1 |= B00000010;  // Enable Timer COMPA Interrupt
 }
 
 char buff[100] = {0};
