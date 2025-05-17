@@ -1,19 +1,43 @@
-#include "controller.h"
+#include "lighting_array_controller.h"
+#include "dmx.h"
 
-Controller controller(6);
+LightingArrayController light_cont(6);
+DMX dmx;
 
-
+// Handler for updating lighting array
 void TC5_Handler(void) {
-  controller.tick();
+  light_cont.tick();
   TC5->COUNT16.INTFLAG.bit.MC0 = 1; // clears the interrupt
 }
 
+// DMX Input
+void SERCOM5_Handler()
+{
+  if ( SERCOM5->USART.INTFLAG.bit.ERROR ) {
+    SERCOM5->USART.INTFLAG.bit.ERROR = 1;   //acknowledge error, clear interrupt
+    
+    if (SERCOM5->USART.STATUS.bit.FERR){ // silly but universal way they seem to detect new DMX packet
+      dmx.break_received();
+      return;
+    }
+  
+  }
+  if ( SERCOM5->USART.INTFLAG.bit.RXC ) {
+    uint8_t incoming_byte = SERCOM5->USART.DATA.reg;       // read buffer to clear interrupt flag
+    dmx.byte_received(incoming_byte);
+  } // RXC
+}
 
 void setup() {
   pinMode(A0, INPUT);
   Serial.begin(9600);
   while(!Serial){;}
-  controller.setup();
+  
+  // DMX Receiving 
+  Serial1.begin(250000);
+  dmx.setup();
+
+  light_cont.setup();
   delay(100);
 }
 
@@ -22,20 +46,5 @@ char termination_char = '\r';
 int ii = 0;
 
 void loop() {
-  delay(100);
-  // if command available write
-  if (Serial.available() > 0){
-    auto incoming_byte = Serial.read();
-    buff[ii++] = incoming_byte;
-    Serial.print("Read byte: ");
-    Serial.println(incoming_byte);
 
-    if (incoming_byte == termination_char){
-      Serial.print("Read string: ");
-      Serial.println(buff);
-      controller.enqueue_message(buff, ii);
-      memset(buff, 0, 100*sizeof(char));
-      ii =0;
-    }
-  }
 }

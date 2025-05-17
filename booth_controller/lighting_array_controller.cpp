@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <avr/dtostrf.h>
 #include <fast_samd21_tc5.h>
-#include "controller.h"
+#include "lighting_array_controller.h"
 
 
-void Controller::tick(){
+void LightingArrayController::tick(){
   static uint8_t rval, bval, gval;
   static uint32_t tick = 0;
   tick++;
@@ -18,7 +18,7 @@ void Controller::tick(){
   FastLED.show();
 }
 
-void Controller::setup(){
+void LightingArrayController::setup(){
   FastLED.addLeds<NEOPIXEL, CONTROL_PIN>(leds_, LED_COUNT).setCorrection(TypicalLEDStrip);;  // GRB ordering is assumed
   FastLED.setBrightness( 255 );
 
@@ -41,7 +41,7 @@ void Controller::setup(){
   }
 }
 
-void Controller::enqueue_message(char * buff, int size){
+void LightingArrayController::enqueue_message(char * buff, int size){
   if (size <= 0) return;
   char egg[100];
   int val;

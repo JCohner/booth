@@ -9,9 +9,9 @@
 #define CONTROL_PIN 6
 #define NUM_RECTANGLES 5
 
-class Controller {
+class LightingArrayController {
 public:
-  Controller(int control_pin=6) : control_pin_(control_pin) {};
+  LightingArrayController(int control_pin=6) : control_pin_(control_pin) {};
   void setup();
   void enqueue_message(char * buff, int size);
   void tick();
