@@ -13,7 +13,8 @@ class LightingArrayController {
 public:
   LightingArrayController(int control_pin=6) : control_pin_(control_pin) {};
   void setup();
-  void enqueue_message(char * buff, int size);
+  // void enqueue_message(char * buff, int size); // rellic
+  void dmx_update(uint8_t* dmx_frame, uint16_t num_channels);
   void tick();
 private:
   CRGB leds_[LED_COUNT];

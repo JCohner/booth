@@ -3,19 +3,21 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <avr/dtostrf.h>
-#include <fast_samd21_tc5.h>
+
+#include "dmx.h"
+
 #include "lighting_array_controller.h"
 
 
 void LightingArrayController::tick(){
-  static uint8_t rval, bval, gval;
-  static uint32_t tick = 0;
-  tick++;
-  for (int i =0; i < NUM_RECTANGLES; i++){
-    Rectangle rect = rects_[i]; 
-    rect.update(tick);
-  }
-  FastLED.show();
+  // static uint8_t rval, bval, gval;
+  // static uint32_t tick = 0;
+  // tick++;
+  // for (int i =0; i < NUM_RECTANGLES; i++){
+  //   Rectangle rect = rects_[i]; 
+  //   rect.update(tick);
+  // }
+  // FastLED.show();
 }
 
 void LightingArrayController::setup(){
@@ -40,6 +42,22 @@ void LightingArrayController::setup(){
     gen_off += rects_[i].count();
   }
 }
+
+void LightingArrayController::dmx_update(uint8_t* dmx_frame, uint16_t channels){
+  uint16_t dmx_i_ = 1;
+  for (int i = 0; i < NUM_RECTANGLES; i++){
+    rects_[i].dmx_update(dmx_frame[dmx_i_], dmx_frame[dmx_i_+1], dmx_frame[dmx_i_+2]);
+    dmx_i_ += 3;
+  }
+  FastLED.show();
+}
+
+
+
+/*
+// Relic Command Structure Pre DMX
+// Takes serial commands of form [a,f,o][rectangle #][r,b,g][value]
+// [a,f,o] - specified amplitude, frequency, or offset value in sine wave of relic rectangle update method
 
 void LightingArrayController::enqueue_message(char * buff, int size){
   if (size <= 0) return;
@@ -89,3 +107,4 @@ void LightingArrayController::enqueue_message(char * buff, int size){
       break;
   }
 }
+*/

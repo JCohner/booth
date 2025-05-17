@@ -77,3 +77,8 @@ uint8_t DMX::get_channel(uint16_t channel){
     return _dmxData[channel];
   }
 }
+
+uint16_t DMX::get_dmx_packet(uint8_t** data){
+  *data = _dmxData;
+  return _slots; // return number of populated slots
+}

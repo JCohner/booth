@@ -30,10 +30,7 @@ public:
   void byte_received(uint8_t byte);
   void break_received(void);
   bool is_data_ready() {return data_ready_;}
-  uint8_t* get_dmx_packet() {
-    data_ready_ = false; // denote that data has been read
-    return _dmxData;
-  }
+  uint16_t get_dmx_packet(uint8_t** data);
   uint8_t get_channel(uint16_t channel);
 
 private:

@@ -1,3 +1,5 @@
+#include <fast_samd21_tc5.h>
+
 #include "lighting_array_controller.h"
 #include "dmx.h"
 
@@ -39,12 +41,13 @@ void setup() {
 
   light_cont.setup();
   delay(100);
+  fast_samd21_tc5_configure(30000); // starts the timer/trigger with 30ms
 }
 
-char buff[100] = {0};
-char termination_char = '\r';
-int ii = 0;
-
 void loop() {
-
+  // map dmx to light controller in 3 channel mode:
+  uint8_t* data;
+  uint16_t num_slots = dmx.get_dmx_packet(&data);
+  light_cont.dmx_update(data, num_slots);
+  delay(30);
 }
