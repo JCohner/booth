@@ -42,17 +42,18 @@ if __name__ == "__main__":
         source_code.write(line)
       i += 1
 
+  # have to reopen the file because we modified the lines!
+  with open("lighting_array_controller.cpp", "r") as source_code:
+    lines = source_code.readlines()
   # insert nice new lines
   with open("lighting_array_controller.cpp", "w") as source_code:
     with open("temp", "r") as temp:
       i = 0
       done = False
       for line in lines:
-        
         if (i > start_line - 1 and not done):
           for new_line in temp.readlines():
             source_code.write("  " + new_line)
-            i += 1
             done = True
           source_code.write("  // end of rectangles\n")
         else:
