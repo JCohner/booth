@@ -20,16 +20,14 @@ void LightingArrayController::setup(){
   rects_[4] = Rectangle(58, 24); // 5th
   rects_[5] = Rectangle(82, 42); // 6th
   rects_[6] = Rectangle(124, 22); // 7th 
-  // rects_[7] = Rectangle(146, 18); // 8th
-  // rects_[8] = Rectangle(164, 16); // 9th
-  // rects_[9] = Rectangle(180, 18); // 10th 
-  // rects_[10] = Rectangle(198, 18); // 11th
-  // rects_[11] = Rectangle(216, 12); // 12th 
-  // rects_[12] = Rectangle(228, 12); // 13th 
-  // rects_[13] = Rectangle(240, 30); // 14th
-  // rects_[10] = Rectangle(198, 18); 
-  // rects_[10] = Rectangle(198, 18); 
-  // rects_[10] = Rectangle(198, 18); 
+  rects_[7] = Rectangle(146, 17); // 8th
+  rects_[8] = Rectangle(163, 16); // 9th
+  rects_[9] = Rectangle(179, 18); // 10th 
+  rects_[10] = Rectangle(197, 18); // 11th
+  rects_[11] = Rectangle(215, 12); // 12th 
+  rects_[12] = Rectangle(227, 12); // 13th 
+  rects_[13] = Rectangle(239, 30); // 14th
+
 
   int gen_off = 0;
   Serial.print("leds is at: ");
