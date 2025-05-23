@@ -5,4 +5,4 @@ compile:
 
 deploy:
 	# can parse `arduino-cli board list` with awk if needed 
-	arduino-cli upload --input-file bin/booth_controller.ino.bin --fqbn arduino:samd:nano_33_iot  -p /dev/ttyACM0 --verbose
+	arduino-cli upload --input-file bin/booth_controller.ino.bin --fqbn arduino:samd:nano_33_iot  -p /dev/ttyACM2 --verbose

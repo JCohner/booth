@@ -8,28 +8,28 @@
 
 #include "lighting_array_controller.h"
 
-
-void LightingArrayController::tick(){
-  // static uint8_t rval, bval, gval;
-  // static uint32_t tick = 0;
-  // tick++;
-  // for (int i =0; i < NUM_RECTANGLES; i++){
-  //   Rectangle rect = rects_[i]; 
-  //   rect.update(tick);
-  // }
-  // FastLED.show();
-}
-
 void LightingArrayController::setup(){
   FastLED.addLeds<NEOPIXEL, CONTROL_PIN>(leds_, LED_COUNT).setCorrection(TypicalLEDStrip);;  // GRB ordering is assumed
   FastLED.setBrightness( 255 );
 
   // setup rectangles
-  rects_[0] = Rectangle(0, 5);
-  rects_[1] = Rectangle(5, 10);
-  rects_[2] = Rectangle(15, 20);
-  rects_[3] = Rectangle(35, 10);
-  rects_[4] = Rectangle(45, 15);
+  rects_[0] = Rectangle(0, 18); // 1st
+  rects_[1] = Rectangle(18, 16); // 2nd
+  rects_[2] = Rectangle(34, 12); // 3rd 
+  rects_[3] = Rectangle(46, 12); // 4th
+  rects_[4] = Rectangle(58, 24); // 5th
+  rects_[5] = Rectangle(82, 42); // 6th
+  rects_[6] = Rectangle(124, 22); // 7th 
+  // rects_[7] = Rectangle(146, 18); // 8th
+  // rects_[8] = Rectangle(164, 16); // 9th
+  // rects_[9] = Rectangle(180, 18); // 10th 
+  // rects_[10] = Rectangle(198, 18); // 11th
+  // rects_[11] = Rectangle(216, 12); // 12th 
+  // rects_[12] = Rectangle(228, 12); // 13th 
+  // rects_[13] = Rectangle(240, 30); // 14th
+  // rects_[10] = Rectangle(198, 18); 
+  // rects_[10] = Rectangle(198, 18); 
+  // rects_[10] = Rectangle(198, 18); 
 
   int gen_off = 0;
   Serial.print("leds is at: ");
@@ -51,60 +51,3 @@ void LightingArrayController::dmx_update(uint8_t* dmx_frame, uint16_t channels){
   }
   FastLED.show();
 }
-
-
-
-/*
-// Relic Command Structure Pre DMX
-// Takes serial commands of form [a,f,o][rectangle #][r,b,g][value]
-// [a,f,o] - specified amplitude, frequency, or offset value in sine wave of relic rectangle update method
-
-void LightingArrayController::enqueue_message(char * buff, int size){
-  if (size <= 0) return;
-  char egg[100];
-  int val;
-  int rect;
-  float valf;
-  int ind = 3;
-  Serial.print("swithcing on: ");
-  Serial.println(buff[0]);
-  switch(buff[0]){
-    case 'q':
-      fast_samd21_tc5_configure(30000); // starts the timer/trigger with 30ms
-      //memset(color_map, 0, sizeof(color_map));
-      break;
-    case 'a':
-    case 'o':
-    case 'f':
-      valf = atof(buff+3);
-      Serial.println(buff[1]);
-      rect = atoi(&buff[1]);
-      switch(buff[2]){
-        case 'r':
-          ind = 0;
-          break;
-        case 'g':
-          ind = 1;
-          break;
-        case 'b':
-          ind = 2;
-          break; 
-      }
-      if (ind != 3){
-        char fs[10];
-        // dtostrf(valf, 4, 2, fs);
-        sprintf(egg, "For rect %d Writing value %c, %c to ",rect, buff[0], buff[2]);
-        Serial.print(egg);
-        Serial.println(valf);
-        if (buff[0] == 'f'){
-          rects_[rect].set_frequency(ind, valf);
-        } else if (buff[0] == 'a'){
-          rects_[rect].set_amplitude(ind, valf);
-        } else if (buff[0] == 'o'){
-          rects_[rect].set_offset(ind, valf);
-        }
-      }
-      break;
-  }
-}
-*/

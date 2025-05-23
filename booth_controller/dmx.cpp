@@ -64,8 +64,8 @@ void DMX::byte_received(uint8_t byte){
     // Serial.println(_next_read_slot);
     if ( _next_read_slot >= _packet_length ) {    //reached expected end of packet
       packet_complete();
-      Serial.print("Read this number of slots: ");
-      Serial.println(_next_read_slot);
+      // Serial.print("Read this number of slots: ");
+      // Serial.println(_next_read_slot);
     }
   } else if (_dmx_read_state == DMX_READ_STATE_START) {
     _dmx_read_state = DMX_READ_STATE_RECEIVING;

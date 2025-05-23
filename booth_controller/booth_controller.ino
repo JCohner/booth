@@ -1,16 +1,8 @@
-#include <fast_samd21_tc5.h>
-
 #include "lighting_array_controller.h"
 #include "dmx.h"
 
 LightingArrayController light_cont(6);
 DMX dmx;
-
-// Handler for updating lighting array
-void TC5_Handler(void) {
-  light_cont.tick();
-  TC5->COUNT16.INTFLAG.bit.MC0 = 1; // clears the interrupt
-}
 
 // DMX Input
 void SERCOM5_Handler()
@@ -41,13 +33,14 @@ void setup() {
 
   light_cont.setup();
   delay(100);
-  fast_samd21_tc5_configure(30000); // starts the timer/trigger with 30ms
 }
 
 void loop() {
   // map dmx to light controller in 3 channel mode:
+  static int egg = 0;
   uint8_t* data;
   uint16_t num_slots = dmx.get_dmx_packet(&data);
   light_cont.dmx_update(data, num_slots);
-  delay(30);
+  Serial.println(egg++);
+  delay(50);
 }
