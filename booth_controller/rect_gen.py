@@ -11,11 +11,12 @@ if __name__ == "__main__":
 
     start_ind = data.iloc[:49, 13].tolist()
     rect_len = data.iloc[:49, 12].tolist()
+    og_num = data.iloc[:49, 0].tolist()
 
-    temp_str = lambda ind, val1, val2 : f"rects_[{int(ind)}] = Rectangle({int(val1)},{int(val2)});\n"
-    template_str = "rects_[] = Rectangle(, )"
+    temp_str = lambda ind, val1, val2, og_num : \
+      f"rects_[{int(ind)}] = Rectangle({int(val1)},{int(val2)});  // rect #{og_num}\n"
     for i in range(len(rect_len)):
-        f.write(temp_str(i, start_ind[i], rect_len[i]))
+        f.write(temp_str(i, start_ind[i], rect_len[i], og_num[i]))
   
 
   # find start and end positon
