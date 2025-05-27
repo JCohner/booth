@@ -41,6 +41,6 @@ void loop() {
   uint8_t* data;
   uint16_t num_slots = dmx.get_dmx_packet(&data);
   light_cont.dmx_update(data, num_slots);
-  Serial.println(egg++);
+  //Serial.println(egg++);
   delay(30);
 }

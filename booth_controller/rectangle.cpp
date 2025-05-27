@@ -13,10 +13,10 @@ Rectangle::Rectangle(int start, int count){
 } 
 
 void Rectangle::dmx_update(uint8_t r, uint8_t g, uint8_t b){
-  // Serial.print("Writing: 0x");
-  // Serial.print(r, HEX);
-  // Serial.print(g, HEX);
-  // Serial.println(b, HEX);
+  Serial.print("Writing: 0x");
+  Serial.print(r, HEX);
+  Serial.print(g, HEX);
+  Serial.println(b, HEX);
   for (int i = 0; i < count_; i++){
     leds_[i] = CRGB(r, g, b);
   }
