@@ -1,8 +1,20 @@
+#include "wiring_private.h"
 #include "lighting_array_controller.h"
-#include "dmx.h"
 
-LightingArrayController light_cont(6);
+#include "dmx.h"
 DMX dmx;
+
+LightingArrayController light_cont(7);
+
+
+// make 3rd serial // from this hero: https://stackoverflow.com/a/71871680/3140063
+Uart mySerial (&sercom0, 5, 6, SERCOM_RX_PAD_1, UART_TX_PAD_0);
+
+// Attach the interrupt handler to the SERCOM
+void SERCOM0_Handler()
+{
+    mySerial.IrqHandler();
+}
 
 // DMX Input
 void SERCOM5_Handler()
@@ -23,7 +35,6 @@ void SERCOM5_Handler()
 }
 
 void setup() {
-  pinMode(A0, INPUT);
   Serial.begin(9600);
   while(!Serial){;}
   
@@ -31,7 +42,13 @@ void setup() {
   Serial1.begin(250000);
   dmx.setup();
 
-  light_cont.setup();
+  // Slave Communication
+  mySerial.begin(9600);
+  pinPeripheral(5, PIO_SERCOM_ALT); // RX
+  pinPeripheral(6, PIO_SERCOM_ALT); // TX
+
+  //light_cont.setup();
+
   delay(100);
 }
 
@@ -39,8 +56,15 @@ void loop() {
   // map dmx to light controller in 3 channel mode:
   static int egg = 0;
   uint8_t* data;
-  uint16_t num_slots = dmx.get_dmx_packet(&data);
-  light_cont.dmx_update(data, num_slots);
-  //Serial.println(egg++);
+  //uint16_t num_slots = dmx.get_dmx_packet(&data);
+  
+  // communicate to controllers
+ // for (int i = 0; i < num_slots; i++){
+   // mySerial.write(data[i]);
+  //}
+  mySerial.write("hi");
+  mySerial.write("\r");
+  Serial.println(egg++);
+  //light_cont.dmx_update(data, num_slots);
   delay(30);
 }
