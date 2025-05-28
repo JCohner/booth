@@ -4,9 +4,9 @@
 #include "dmx.h"
 DMX dmx;
 
-LightingArrayController light_cont(7);
+LightingArrayController light_cont(6);
 
-
+/*
 // make 3rd serial // from this hero: https://stackoverflow.com/a/71871680/3140063
 Uart mySerial (&sercom0, 5, 6, SERCOM_RX_PAD_1, UART_TX_PAD_0);
 
@@ -15,6 +15,7 @@ void SERCOM0_Handler()
 {
     mySerial.IrqHandler();
 }
+*/
 
 // DMX Input
 void SERCOM5_Handler()
@@ -42,12 +43,14 @@ void setup() {
   Serial1.begin(250000);
   dmx.setup();
 
+  /*
   // Slave Communication
   mySerial.begin(9600);
   pinPeripheral(5, PIO_SERCOM_ALT); // RX
   pinPeripheral(6, PIO_SERCOM_ALT); // TX
+  */
 
-  //light_cont.setup();
+  light_cont.setup();
 
   delay(100);
 }
@@ -57,13 +60,14 @@ void loop() {
   static int egg = 0;
   uint8_t* data;
   uint16_t num_slots = dmx.get_dmx_packet(&data);
-  
+  /*
   // communicate to controllers
- for (int i = 0; i < 10; i++){
+ for (int i = 85; i < 192; i++){
    mySerial.write(data[i]);
   }
   mySerial.write("\r");
+  */
   Serial.println(egg++);
-  //light_cont.dmx_update(data, num_slots);
+  light_cont.dmx_update(data, num_slots);
   //delay(30);
 }

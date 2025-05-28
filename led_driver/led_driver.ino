@@ -31,7 +31,7 @@ void loop() {
       Serial.println("");
       //Serial.println(buff);
       // light LEDs
-      //light_cont.dmx_update(buff, 1);
+      light_cont.dmx_update(buff, 1);
       memset(buff, 0, 50*sizeof(char));
       ii =0;
     }
