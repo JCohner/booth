@@ -14,22 +14,21 @@ void setup() {
   light_cont.setup();
 }
 
-uint8_t buff[50] = {0};
+uint8_t buff[100] = {0};
 char term_char = '\r';
 int ii = 0;
 
 void loop() {
-  delay(30);
   // read in master commands
   if (Serial1.available() > 0) {
     // read the incoming byte:
     auto incoming_byte = Serial1.read();
     buff[ii++] = incoming_byte;
-    Serial.print("Read byte: ");
-    Serial.println(incoming_byte);
+    //Serial.print("Read byte: ");
+    Serial.print(incoming_byte, HEX);
 
     if (incoming_byte == term_char){
-      Serial.print("Read buff");
+      Serial.println("");
       //Serial.println(buff);
       // light LEDs
       //light_cont.dmx_update(buff, 1);

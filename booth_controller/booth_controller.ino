@@ -56,15 +56,14 @@ void loop() {
   // map dmx to light controller in 3 channel mode:
   static int egg = 0;
   uint8_t* data;
-  //uint16_t num_slots = dmx.get_dmx_packet(&data);
+  uint16_t num_slots = dmx.get_dmx_packet(&data);
   
   // communicate to controllers
- // for (int i = 0; i < num_slots; i++){
-   // mySerial.write(data[i]);
-  //}
-  mySerial.write("hi");
+ for (int i = 0; i < 10; i++){
+   mySerial.write(data[i]);
+  }
   mySerial.write("\r");
   Serial.println(egg++);
   //light_cont.dmx_update(data, num_slots);
-  delay(30);
+  //delay(30);
 }
