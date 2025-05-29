@@ -6,24 +6,37 @@ import numpy as np
 def populate_rect_section(fname_prefix: str, rect_start: int, rect_end: int):
   fname = fname_prefix + "lighting_array_controller.cpp"
 
-
-  # write to temp generate file
+  '''
+  open and write c code to temp file 
+  ''' 
   with open("temp", "w") as f:
     filename = 'rects.csv'
     data = pd.read_csv(filename)
     # print(data)
 
-    start_ind = data.iloc[rect_start:rect_end, 13].tolist()
+    '''
+    Parse out rectangle length (in LEDs) and its assigned number
+    '''
     rect_len = data.iloc[rect_start:rect_end, 12].tolist()
     og_num = data.iloc[rect_start:rect_end, 0].tolist()
+    accumulator_ind = 0
 
+    '''
+    string builder
+    '''
     temp_str = lambda ind, val1, val2, og_num : \
       f"rects_[{int(ind)}] = Rectangle({int(val1)},{int(val2)});  // rect #{og_num}\n"
+    
     for i in range(len(rect_len)):
-        f.write(temp_str(i, start_ind[i], rect_len[i], og_num[i]))
+        f.write(temp_str(i, accumulator_ind, rect_len[i], og_num[i]))
+        accumulator_ind += rect_len[i]
   
-
-  # find start and end positon
+  '''
+  open relevant controller cpp file and
+  * find start and end positon
+  * remove existing code
+  * populate with generated code
+  '''
   start_line = 0
   end_line = 0 
   i = 0

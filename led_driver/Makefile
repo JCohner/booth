@@ -7,4 +7,4 @@ compile:
 
 deploy:
 	# can parse `arduino-cli board list` with awk if needed 
-	arduino-cli upload --input-file bin/led_driver.ino.bin --fqbn arduino:samd:nano_33_iot  -p /dev/ttyACM2 --verbose
+	arduino-cli upload --input-file bin/led_driver.ino.bin --fqbn arduino:samd:nano_33_iot  -p /dev/ttyACM4 --verbose
