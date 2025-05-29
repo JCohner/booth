@@ -6,7 +6,7 @@
 
 // How many NeoPixels are attached to the Arduino?
 #define LED_COUNT 292
-#define CONTROL_PIN 6
+#define CONTROL_PIN 7
 #define NUM_RECTANGLES 13
 
 class LightingArrayController {

@@ -1,5 +1,5 @@
 #include <stdint.h>
-
+#include <fast_samd21_tc5.h>
 #include "lighting_array_controller.h"
 
 LightingArrayController light_cont(6);
@@ -12,11 +12,21 @@ void setup() {
   Serial1.begin(9600);
 
   light_cont.setup();
+
+  fast_samd21_tc5_configure(30000); // 30 ms
 }
 
+uint8_t done_buff[100] = {0};
 uint8_t buff[100] = {0};
 char term_char = '\r';
 int ii = 0;
+
+void TC5_Handler(void) {
+  light_cont.dmx_update(done_buff, 1);
+  TC5->COUNT16.INTFLAG.bit.MC0 = 1; // clears the interrupt
+}
+
+
 
 void loop() {
   // read in master commands
@@ -25,14 +35,20 @@ void loop() {
     auto incoming_byte = Serial1.read();
     buff[ii++] = incoming_byte;
     //Serial.print("Read byte: ");
-    Serial.print(incoming_byte, HEX);
+    //Serial.print(incoming_byte, HEX); 
 
     if (incoming_byte == term_char){
-      Serial.println("");
+      //Serial.println("");
       //Serial.println(buff);
-      // light LEDs
-      light_cont.dmx_update(buff, 1);
-      memset(buff, 0, 50*sizeof(char));
+      // populate to done buff
+      fast_samd21_tc5_disable();
+      //memset(done_buff, 0, 100*sizeof(char));
+      
+      for (int i = 0; i < ii; i++){
+        done_buff[i] = buff[i];
+      }
+      fast_samd21_tc5_start();
+      memset(buff, 0, 100*sizeof(char));
       ii =0;
     }
   }
