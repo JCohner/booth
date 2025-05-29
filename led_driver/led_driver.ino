@@ -16,13 +16,15 @@ void setup() {
   fast_samd21_tc5_configure(30000); // 30 ms
 }
 
+uint8_t other_buff[100] = {0};
 uint8_t done_buff[100] = {0};
 uint8_t buff[100] = {0};
+uint8_t * ptr = done_buff;
 char term_char = '\r';
 int ii = 0;
 
 void TC5_Handler(void) {
-  light_cont.dmx_update(done_buff, 1);
+  light_cont.dmx_update(ptr, 1);
   TC5->COUNT16.INTFLAG.bit.MC0 = 1; // clears the interrupt
 }
 
@@ -32,15 +34,22 @@ void loop() {
     // read the incoming byte:
     auto incoming_byte = Serial1.read();
     buff[ii++] = incoming_byte;
-    //Serial.print("Read byte: ");
-    //Serial.print(incoming_byte, HEX); 
-
     if (incoming_byte == term_char){
-      fast_samd21_tc5_stop();
-      for (int i = 0; i < ii; i++){
-        done_buff[i] = buff[i];
+      if (ptr == other_buff){
+        for (int i = 0; i < ii; i++){
+          done_buff[i] = buff[i];
+        }
+        fast_samd21_tc5_disable();
+        ptr = done_buff;
+        fast_samd21_tc5_start();
+      } else if (ptr == done_buff){
+        for (int i = 0; i < ii; i++){
+          other_buff[i] = buff[i];
+        }
+        fast_samd21_tc5_disable();
+        ptr = other_buff;
+        fast_samd21_tc5_start();
       }
-      fast_samd21_tc5_configure(30000); 
       ii =0;
     }
   }

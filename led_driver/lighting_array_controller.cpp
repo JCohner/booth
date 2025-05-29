@@ -28,7 +28,7 @@ void LightingArrayController::setup(){
   rects_[12] = Rectangle(278,14);  // rect #47
   rects_[13] = Rectangle(292,9);  // rect #40
   rects_[14] = Rectangle(301,32);  // rect #43
-  //rects_[15] = Rectangle(333,6);  // rect #49
+  rects_[15] = Rectangle(333,6);  // rect #49
   // rects_[16] = Rectangle(339,16);  // rect #48
   // rects_[17] = Rectangle(355,22);  // rect #41
   // rects_[18] = Rectangle(377,22);  // rect #46
