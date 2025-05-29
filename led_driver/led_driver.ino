@@ -9,7 +9,7 @@ void setup() {
   while(!Serial){;}
 
   // Slave Receiving 
-  Serial1.begin(9600);
+  Serial1.begin(250000);
 
   light_cont.setup();
 
@@ -38,12 +38,7 @@ void loop() {
     //Serial.print(incoming_byte, HEX); 
 
     if (incoming_byte == term_char){
-      //Serial.println("");
-      //Serial.println(buff);
-      // populate to done buff
-      fast_samd21_tc5_disable();
-      //memset(done_buff, 0, 100*sizeof(char));
-      
+      fast_samd21_tc5_disable();      
       for (int i = 0; i < ii; i++){
         done_buff[i] = buff[i];
       }

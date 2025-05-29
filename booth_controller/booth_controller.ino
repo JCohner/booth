@@ -44,7 +44,7 @@ void setup() {
   dmx.setup();
   
   // Slave Communication
-  mySerial.begin(9600);
+  mySerial.begin(250000);
   pinPeripheral(5, PIO_SERCOM_ALT); // RX
   pinPeripheral(6, PIO_SERCOM_ALT); // TX
 
