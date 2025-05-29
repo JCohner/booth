@@ -60,7 +60,7 @@ void loop() {
   uint16_t num_slots = dmx.get_dmx_packet(&data);
 
   // communicate to controllers
- for (int i = 87; i < 192; i++){
+ for (int i = 87; i < num_slots; i++){
    mySerial.write(data[i]);
   }
   mySerial.write("\r");

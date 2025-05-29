@@ -5,9 +5,9 @@
 #include "rectangle.h"
 
 // How many NeoPixels are attached to the Arduino?
-#define LED_COUNT 411
+#define LED_COUNT 333
 #define CONTROL_PIN 7
-#define NUM_RECTANGLES 20
+#define NUM_RECTANGLES 15
 
 class LightingArrayController {
 public:

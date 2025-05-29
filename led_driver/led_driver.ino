@@ -26,8 +26,6 @@ void TC5_Handler(void) {
   TC5->COUNT16.INTFLAG.bit.MC0 = 1; // clears the interrupt
 }
 
-
-
 void loop() {
   // read in master commands
   if (Serial1.available() > 0) {
@@ -38,12 +36,11 @@ void loop() {
     //Serial.print(incoming_byte, HEX); 
 
     if (incoming_byte == term_char){
-      fast_samd21_tc5_disable();      
+      fast_samd21_tc5_stop();
       for (int i = 0; i < ii; i++){
         done_buff[i] = buff[i];
       }
-      fast_samd21_tc5_start();
-      memset(buff, 0, 100*sizeof(char));
+      fast_samd21_tc5_configure(30000); 
       ii =0;
     }
   }
