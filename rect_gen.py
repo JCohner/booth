@@ -1,17 +1,21 @@
+import sys
+
 import pandas as pd
 import numpy as np
 
+def populate_rect_section(fname_prefix: str, rect_start: int, rect_end: int):
+  fname = fname_prefix + "lighting_array_controller.cpp"
 
-if __name__ == "__main__":
+
   # write to temp generate file
   with open("temp", "w") as f:
     filename = 'rects.csv'
     data = pd.read_csv(filename)
     # print(data)
 
-    start_ind = data.iloc[:49, 13].tolist()
-    rect_len = data.iloc[:49, 12].tolist()
-    og_num = data.iloc[:49, 0].tolist()
+    start_ind = data.iloc[rect_start:rect_end, 13].tolist()
+    rect_len = data.iloc[rect_start:rect_end, 12].tolist()
+    og_num = data.iloc[rect_start:rect_end, 0].tolist()
 
     temp_str = lambda ind, val1, val2, og_num : \
       f"rects_[{int(ind)}] = Rectangle({int(val1)},{int(val2)});  // rect #{og_num}\n"
@@ -23,9 +27,9 @@ if __name__ == "__main__":
   start_line = 0
   end_line = 0 
   i = 0
-  with open("lighting_array_controller.cpp", "r") as source_code:
+  with open(fname, "r") as source_code:
     lines = source_code.readlines()
-  with open("lighting_array_controller.cpp", "r") as source_code:
+  with open(fname, "r") as source_code:
     for line in lines:
       # print(line)
       if "// setup rectangles" in line:
@@ -36,7 +40,7 @@ if __name__ == "__main__":
         print(f"end is: {i}")
       i +=1
   # remove existing text in start and end position
-  with open("lighting_array_controller.cpp", "w") as source_code:
+  with open(fname, "w") as source_code:
     i = 0
     for line in lines:
       if (i < start_line or i > end_line):
@@ -44,10 +48,10 @@ if __name__ == "__main__":
       i += 1
 
   # have to reopen the file because we modified the lines!
-  with open("lighting_array_controller.cpp", "r") as source_code:
+  with open(fname, "r") as source_code:
     lines = source_code.readlines()
   # insert nice new lines
-  with open("lighting_array_controller.cpp", "w") as source_code:
+  with open(fname, "w") as source_code:
     with open("temp", "r") as temp:
       i = 0
       done = False
@@ -60,5 +64,11 @@ if __name__ == "__main__":
         else:
           source_code.write(line)
         i += 1
+
+
+if __name__ == "__main__":
+    populate_rect_section("booth_controller/", 0, 29)
+    populate_rect_section("led_driver/", 29, 49)
+    
 
 

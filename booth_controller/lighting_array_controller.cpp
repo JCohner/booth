@@ -42,26 +42,6 @@ void LightingArrayController::setup(){
   rects_[26] = Rectangle(531,16);  // rect #30
   rects_[27] = Rectangle(547,76);  // rect #21
   rects_[28] = Rectangle(623,24);  // rect #34
-  // rects_[29] = Rectangle(647,22);  // rect #22
-  // rects_[30] = Rectangle(669,12);  // rect #33
-  // rects_[31] = Rectangle(681,30);  // rect #24
-  // rects_[32] = Rectangle(711,24);  // rect #35
-  // rects_[33] = Rectangle(735,36);  // rect #23
-  // rects_[34] = Rectangle(771,36);  // rect #25
-  // rects_[35] = Rectangle(807,16);  // rect #36
-  // rects_[36] = Rectangle(823,18);  // rect #37
-  // rects_[37] = Rectangle(841,20);  // rect #44
-  // rects_[38] = Rectangle(861,12);  // rect #38
-  // rects_[39] = Rectangle(873,16);  // rect #45
-  // rects_[40] = Rectangle(889,36);  // rect #39
-  // rects_[41] = Rectangle(925,14);  // rect #47
-  // rects_[42] = Rectangle(939,9);  // rect #40
-  // rects_[43] = Rectangle(948,32);  // rect #43
-  // rects_[44] = Rectangle(980,6);  // rect #49
-  // rects_[45] = Rectangle(986,16);  // rect #48
-  // rects_[46] = Rectangle(1002,22);  // rect #41
-  // rects_[47] = Rectangle(1024,22);  // rect #46
-  // rects_[48] = Rectangle(1046,12);  // rect #42
   // end of rectangles
   
   int gen_off = 0;
