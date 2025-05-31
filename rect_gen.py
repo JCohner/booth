@@ -80,8 +80,9 @@ def populate_rect_section(fname_prefix: str, rect_start: int, rect_end: int):
 
 
 if __name__ == "__main__":
-    populate_rect_section("booth_controller/", 0, 29)
-    populate_rect_section("led_driver/", 29, 49)
+    #print(f"{sys.argv[1]}, {int(sys.argv[2])}, {int(sys.argv[3])}")
+    populate_rect_section(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]))
+    # populate_rect_section("led_driver/", 29, 49)
     
 
 
