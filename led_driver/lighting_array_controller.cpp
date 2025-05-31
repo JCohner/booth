@@ -20,19 +20,19 @@ void LightingArrayController::setup(){
   rects_[4] = Rectangle(88,36);  // rect #23
   rects_[5] = Rectangle(124,36);  // rect #25
   rects_[6] = Rectangle(160,16);  // rect #36
-  rects_[7] = Rectangle(176,18);  // rect #37
-  rects_[8] = Rectangle(194,20);  // rect #44
-  rects_[9] = Rectangle(214,12);  // rect #38
-  rects_[10] = Rectangle(226,16);  // rect #45
-  rects_[11] = Rectangle(242,36);  // rect #39
-  rects_[12] = Rectangle(278,14);  // rect #47
-  rects_[13] = Rectangle(292,9);  // rect #40
-  rects_[14] = Rectangle(301,32);  // rect #43
-  rects_[15] = Rectangle(333,6);  // rect #49
-  // rects_[16] = Rectangle(339,16);  // rect #48
-  // rects_[17] = Rectangle(355,22);  // rect #41
-  // rects_[18] = Rectangle(377,22);  // rect #46
-  // rects_[19] = Rectangle(399,12);  // rect #42
+  rects_[7] = Rectangle(176,17);  // rect #37
+  rects_[8] = Rectangle(193,20);  // rect #44
+  rects_[9] = Rectangle(213,12);  // rect #38
+  rects_[10] = Rectangle(225,16);  // rect #45
+  rects_[11] = Rectangle(241,36);  // rect #39
+  rects_[12] = Rectangle(277,14);  // rect #47
+  rects_[13] = Rectangle(291,9);  // rect #40
+  rects_[14] = Rectangle(300,32);  // rect #43
+  rects_[15] = Rectangle(332,6);  // rect #49
+  rects_[16] = Rectangle(338,16);  // rect #48
+  rects_[17] = Rectangle(354,22);  // rect #41
+  rects_[18] = Rectangle(376,22);  // rect #46
+  rects_[19] = Rectangle(398,12);  // rect #42
   // end of rectangles
   
   int gen_off = 0;
@@ -48,7 +48,7 @@ void LightingArrayController::setup(){
 }
 
 void LightingArrayController::dmx_update(uint8_t* dmx_frame, uint16_t channels){
-  uint16_t dmx_i_ = 1;
+  uint16_t dmx_i_ = 87;
   for (int i = 0; i < NUM_RECTANGLES; i++){
     rects_[i].dmx_update(dmx_frame[dmx_i_], dmx_frame[dmx_i_+1], dmx_frame[dmx_i_+2]);
     dmx_i_ += 3;
