@@ -48,7 +48,8 @@ void LightingArrayController::setup(){
 }
 
 void LightingArrayController::dmx_update(uint8_t* dmx_frame, uint16_t channels){
-  uint16_t dmx_i_ = 1;
+  uint16_t dmx_i_ = DMX_OFFSET;
+  Rectangle::master_dimmer_ = dmx_frame[MASTER_DMX_DMX_CHANNEL]; // .first byte is master dimmer
   for (int i = 0; i < NUM_RECTANGLES; i++){
     rects_[i].dmx_update(dmx_frame[dmx_i_], dmx_frame[dmx_i_+1], dmx_frame[dmx_i_+2]);
     dmx_i_ += 3;

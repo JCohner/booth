@@ -3,13 +3,19 @@ VERSION=0x03
 
 compile:
 	# compile primary
-	source venv/bin/activate && python3 rect_gen.py "booth_controller/" 0 29
+	source venv/bin/activate && python3 rect_gen.py "booth_controller/" 0 29 2
 	@arduino-cli compile --output-dir bin/primary_bin --fqbn arduino:samd:nano_33_iot \
 	--build-property "compiler.cpp.extra_flags=-std=c++14" -v --build-path build/primary_build booth_controller/
 
-	source venv/bin/activate && python3 rect_gen.py "booth_controller/" 29 49
+	source venv/bin/activate && python3 rect_gen.py "booth_controller/" 29 49 88
 	@arduino-cli compile --output-dir bin/secondary_bin --fqbn arduino:samd:nano_33_iot \
 	--build-property "compiler.cpp.extra_flags=-std=c++14" -v --build-path build/secondary_build booth_controller/
+
+build_primary:
+	# compile primary
+	source venv/bin/activate && python3 rect_gen.py "booth_controller/" 0 29 1
+	@arduino-cli compile --output-dir bin/primary_bin --fqbn arduino:samd:nano_33_iot \
+	--build-property "compiler.cpp.extra_flags=-std=c++14" -v --build-path build/primary_build booth_controller/
 
 deploy_primary:
 	# can parse `arduino-cli board list` with awk if needed 

@@ -4,10 +4,14 @@
 #include <FastLED.h>
 #include "rectangle.h"
 
-// How many NeoPixels are attached to the Arduino?
-#define LED_COUNT 647
+// Setup Custom Parameters
+#define LED_COUNT 410
+#define NUM_RECTANGLES 20
+#define DMX_OFFSET 88
+// End Custom Parameters
+
 #define CONTROL_PIN 7
-#define NUM_RECTANGLES 29
+#define MASTER_DMX_DMX_CHANNEL 1 // Don't forget DMX is effectivley 1 indexed. We are putting master dimmer on Chan 1
 
 class LightingArrayController {
 public:
@@ -19,7 +23,7 @@ public:
 private:
   CRGB leds_[LED_COUNT];
   int control_pin_;
-
+  uint8_t master_dimmer_;
   Rectangle rects_[NUM_RECTANGLES];
 };
 

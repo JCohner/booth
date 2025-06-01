@@ -1,7 +1,14 @@
 import sys
+import argparse
 
 import pandas as pd
 import numpy as np
+
+'''
+Application specific text generators
+'''
+
+# Write valid c code to instantiate all given rectangles for this device
 
 def write_rect_values_to_temp(rect_start: int, rect_end: int):
     with open("temp", "w") as f:
@@ -25,6 +32,24 @@ def write_rect_values_to_temp(rect_start: int, rect_end: int):
         for i in range(len(rect_len)):
             f.write(temp_str(i, accumulator_ind, rect_len[i], og_num[i]))
             accumulator_ind += rect_len[i]
+
+# Parse last line into header file
+
+def write_header_values_to_temp(dmx_offset: int):
+    # all the info we need to write can be inferred for 
+    with open("temp", "r") as temp:
+        for line in temp:
+            pass
+        last_line = line
+    # cursed python 
+    led_count_args = last_line.split('(')[1].split(')')[0]
+    led_count = sum(int(i) for i in led_count_args.split(","))
+    num_rectangles = int(last_line.split('[')[1].split(']')[0]) + 1
+    
+    with open("temp", "w") as f:
+        f.write(f"#define LED_COUNT {led_count}\n")
+        f.write(f"#define NUM_RECTANGLES {num_rectangles}\n")
+        f.write(f"#define DMX_OFFSET {dmx_offset}\n")
 
 def delete_lines_between_flags(fname: str, start_flag: str, end_flag: str):
     start_line = 0
@@ -51,7 +76,7 @@ def delete_lines_between_flags(fname: str, start_flag: str, end_flag: str):
             i += 1
     return start_line
 
-def write_temp_file_between_flags(fname:str, start_line: int, end_flag: str):
+def write_temp_file_between_flags(fname:str, start_line: int, format_help:str, end_flag: str):
   # have to reopen the file because we modified the lines!
   with open(fname, "r") as source_code:
     lines = source_code.readlines()
@@ -63,9 +88,9 @@ def write_temp_file_between_flags(fname:str, start_line: int, end_flag: str):
       for line in lines:
         if (i > start_line - 1 and not done):
           for new_line in temp.readlines():
-            source_code.write("  " + new_line)
+            source_code.write(f"{format_help}" + new_line)
             done = True
-          source_code.write(f"  // end of rectangles\n")
+          source_code.write(f"{end_flag}\n")
         else:
           source_code.write(line)
         i += 1
@@ -75,12 +100,19 @@ def populate_rect_section(fname_prefix: str, rect_start: int, rect_end: int):
     fname = fname_prefix + "lighting_array_controller.cpp"
     write_rect_values_to_temp(rect_start, rect_end)
     start_line = delete_lines_between_flags(fname, "  // setup rectangles", "  // end of rectangles")
-    write_temp_file_between_flags(fname, start_line, "  // end of rectangles")
+    write_temp_file_between_flags(fname, start_line, format_help="  ", end_flag="  // end of rectangles")
 
 
+
+def populate_h_file(fname_prefix, dmx_offset: int):
+    fname = fname_prefix + "lighting_array_controller.h"
+    write_header_values_to_temp(dmx_offset)
+    start_line = delete_lines_between_flags(fname, "// Setup Custom Parameters", "// End Custom Parameters")
+    write_temp_file_between_flags(fname, start_line, format_help="", end_flag="// End Custom Parameters")
 
 if __name__ == "__main__":
     populate_rect_section(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]))
+    populate_h_file(sys.argv[1], int(sys.argv[4]))
     
 
 

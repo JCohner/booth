@@ -2,7 +2,7 @@
 #include "rectangle.h"
 #include <Arduino.h> //debug
 
-//uint16_t Rectangle::id_ = 0;
+volatile uint8_t Rectangle::master_dimmer_ = 0;
 
 Rectangle::Rectangle(int start, int count){
   global_start_ = start;
@@ -18,6 +18,6 @@ void Rectangle::dmx_update(uint8_t r, uint8_t g, uint8_t b){
   Serial.print(g, HEX);
   Serial.println(b, HEX);
   for (int i = 0; i < count_; i++){
-    leds_[i] = CRGB(r, g, b);
+    leds_[i] = CRGB(r, g, b).nscale8(master_dimmer_);
   }
 }
