@@ -12,6 +12,7 @@ void LightingArrayController::setup(){
   FastLED.addLeds<NEOPIXEL, CONTROL_PIN>(leds_, LED_COUNT).setCorrection(TypicalLEDStrip);;  // GRB ordering is assumed
   FastLED.setBrightness( 255 );
 
+  // DO NOT EDIT. WILL BE OVERWRITTEN BY rect_gen.py
   // setup rectangles
   rects_[0] = Rectangle(0,22);  // rect #22
   rects_[1] = Rectangle(22,12);  // rect #33
