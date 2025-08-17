@@ -34,15 +34,22 @@ void setup() {
 
   light_cont.setup();
 
+  pinMode(3, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(4, OUTPUT);
+  digitalWrite(3, LOW);
+  digitalWrite(2, LOW);
+  digitalWrite(4, LOW);
+  
   delay(100);
 }
-
+    
 void loop() {
   // map dmx to light controller in 3 channel mode:
   static int egg = 0; // sometimes its nice to see an incrementing number
   uint8_t* data;
   uint16_t num_slots = dmx.get_dmx_packet(&data);
 
-  Serial.println(egg++);
+  //Serial.println(egg++);
   light_cont.dmx_update(data, num_slots);
 }
